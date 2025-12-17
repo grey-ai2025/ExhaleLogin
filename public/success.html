@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success - Family Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .checkmark-circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+        }
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+        .checkmark-container {
+            animation: scale 0.3s ease-in-out 0.9s both;
+        }
+        @keyframes scale {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center">
+        <!-- Animated Checkmark -->
+        <div class="checkmark-container w-24 h-24 mx-auto mb-6">
+            <svg class="w-full h-full" viewBox="0 0 52 52">
+                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="#22c55e" stroke-width="2"/>
+                <path class="checkmark-check" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14 27l8 8 16-16"/>
+            </svg>
+        </div>
+
+        <!-- Success Message -->
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Gmail Connected Successfully!</h1>
+
+        <p id="success-subtitle" class="text-gray-600 mb-6">
+            <span id="family-display"></span>
+        </p>
+
+        <!-- Connected Email -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <p class="text-sm text-gray-500 mb-1">Connected account:</p>
+            <p id="connected-email" class="text-lg font-semibold text-gray-800"></p>
+        </div>
+
+        <!-- What's Next -->
+        <div class="bg-blue-50 rounded-lg p-4 mb-6 text-left">
+            <h3 class="text-sm font-semibold text-blue-800 mb-2">What happens next?</h3>
+            <ul class="text-sm text-blue-700 space-y-1">
+                <li>Your Family Assistant will now monitor your Gmail</li>
+                <li>School-related emails will be processed automatically</li>
+                <li>You'll receive summaries and reminders via Telegram</li>
+            </ul>
+        </div>
+
+        <!-- Close Instructions -->
+        <div class="flex items-center justify-center gap-2 text-gray-600 mb-4">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="text-sm">You can close this window and return to Telegram</p>
+        </div>
+
+        <!-- Optional: Close Button for popup windows -->
+        <button onclick="window.close()"
+                class="text-sm text-blue-600 hover:text-blue-800 underline">
+            Close this window
+        </button>
+    </div>
+
+    <script>
+        // Get query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        const familyName = urlParams.get('familyName');
+
+        // Update email display
+        if (email) {
+            document.getElementById('connected-email').textContent = email;
+        } else {
+            document.getElementById('connected-email').textContent = 'Your Gmail account';
+        }
+
+        // Update family name display
+        if (familyName) {
+            document.getElementById('family-display').textContent = `for ${familyName}`;
+        } else {
+            document.getElementById('success-subtitle').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

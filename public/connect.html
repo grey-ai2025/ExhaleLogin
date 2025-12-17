@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Gmail - Family Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Connect Gmail</h1>
+            <p id="family-subtitle" class="text-gray-600">for <span id="family-name" class="font-semibold">Your Family</span></p>
+        </div>
+
+        <!-- Main Content -->
+        <div id="connect-section">
+            <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                <p class="text-sm text-blue-800">
+                    This allows your Family Assistant to read school-related emails and help keep you organized.
+                </p>
+            </div>
+
+            <!-- Permissions Info -->
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-700 mb-3">What we'll access:</h3>
+                <ul class="space-y-2">
+                    <li class="flex items-center text-sm text-gray-600">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Read email messages
+                    </li>
+                    <li class="flex items-center text-sm text-gray-600">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        View and create labels
+                    </li>
+                    <li class="flex items-center text-sm text-gray-600">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Mark emails as read
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Connect Button -->
+            <button id="connect-btn" onclick="startOAuth()"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Connect with Google
+            </button>
+
+            <!-- Privacy Note -->
+            <p class="mt-4 text-xs text-gray-500 text-center">
+                We only access emails you label for the assistant. We never read personal emails without your permission.
+            </p>
+        </div>
+
+        <!-- Already Connected Section (hidden by default) -->
+        <div id="connected-section" class="hidden">
+            <div class="bg-green-50 rounded-lg p-4 mb-6 flex items-center gap-3">
+                <svg class="w-6 h-6 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                    <p class="text-sm font-semibold text-green-800">Gmail Connected!</p>
+                    <p id="connected-email" class="text-sm text-green-700"></p>
+                </div>
+            </div>
+
+            <p class="text-sm text-gray-600 mb-4 text-center">
+                Want to connect a different account?
+            </p>
+
+            <button onclick="startOAuth()"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors">
+                Reconnect Gmail
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-section" class="hidden">
+            <div class="flex flex-col items-center gap-4">
+                <div class="loading-spinner"></div>
+                <p class="text-gray-600">Checking connection status...</p>
+            </div>
+        </div>
+
+        <!-- Error Section -->
+        <div id="error-section" class="hidden">
+            <div class="bg-red-50 rounded-lg p-4 mb-6">
+                <p id="error-message" class="text-sm text-red-800"></p>
+            </div>
+            <button onclick="window.location.reload()"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors">
+                Try Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Get query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const familyId = urlParams.get('familyId');
+        const familyName = urlParams.get('familyName');
+
+        // Update family name display
+        if (familyName) {
+            document.getElementById('family-name').textContent = familyName;
+        } else {
+            document.getElementById('family-subtitle').style.display = 'none';
+        }
+
+        // Check connection status on page load
+        async function checkConnectionStatus() {
+            if (!familyId) {
+                showError('Missing family ID. Please use a valid connection link.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch(`/api/auth/status?familyId=${encodeURIComponent(familyId)}`);
+                const data = await response.json();
+
+                if (data.connected) {
+                    showConnected(data.email);
+                } else {
+                    showConnect();
+                }
+            } catch (error) {
+                console.error('Error checking status:', error);
+                showConnect(); // Show connect button on error
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('connect-section').classList.add('hidden');
+            document.getElementById('connected-section').classList.add('hidden');
+            document.getElementById('error-section').classList.add('hidden');
+            document.getElementById('loading-section').classList.remove('hidden');
+        }
+
+        function showConnect() {
+            document.getElementById('loading-section').classList.add('hidden');
+            document.getElementById('connected-section').classList.add('hidden');
+            document.getElementById('error-section').classList.add('hidden');
+            document.getElementById('connect-section').classList.remove('hidden');
+        }
+
+        function showConnected(email) {
+            document.getElementById('loading-section').classList.add('hidden');
+            document.getElementById('connect-section').classList.add('hidden');
+            document.getElementById('error-section').classList.add('hidden');
+            document.getElementById('connected-email').textContent = email;
+            document.getElementById('connected-section').classList.remove('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('loading-section').classList.add('hidden');
+            document.getElementById('connect-section').classList.add('hidden');
+            document.getElementById('connected-section').classList.add('hidden');
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error-section').classList.remove('hidden');
+        }
+
+        function startOAuth() {
+            const params = new URLSearchParams();
+            params.set('familyId', familyId);
+            if (familyName) {
+                params.set('familyName', familyName);
+            }
+            window.location.href = `/api/auth/start?${params.toString()}`;
+        }
+
+        // Check status on page load
+        checkConnectionStatus();
+    </script>
+</body>
+</html>
