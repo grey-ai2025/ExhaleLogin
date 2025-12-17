@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -52,6 +53,9 @@ app.get('/connect', async (req, res) => {
 
 // Auth API routes
 app.use('/api/auth', authRoutes);
+
+// Admin routes
+app.use('/admin', adminRoutes);
 
 // 404 handler
 app.use((req, res) => {
