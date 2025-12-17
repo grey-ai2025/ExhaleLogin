@@ -21,6 +21,11 @@ app.use((req, res, next) => {
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Home page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({
